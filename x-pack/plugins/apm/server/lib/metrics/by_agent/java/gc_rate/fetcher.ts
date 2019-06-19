@@ -15,7 +15,7 @@ import { rangeFilter } from '../../../../helpers/range_filter';
 
 export interface GcRateMetrics extends MetricSeriesKeys {
   gcCountMax: AggValue;
-  gcCountAvg: AggValue;
+  // gcCountAvg: AggValue;
 }
 
 export async function fetch(setup: Setup, serviceName: string) {
@@ -39,24 +39,24 @@ export async function fetch(setup: Setup, serviceName: string) {
       serial_diff: {
         buckets_path: 'gcCountMaxSeqNatural'
       }
-    },
-    gcCountAvgSeq: {
-      avg: {
-        field: 'jvm.gc.count'
-      }
-    },
-    gcCountAvgSeqNatural: {
-      bucket_script: {
-        buckets_path: {
-          value: 'gcCountAvgSeq'
-        },
-        script: 'params.value > 0.0 ? params.value : 0.0'
-      }
-    },
-    gcCountAvg: {
-      serial_diff: {
-        buckets_path: 'gcCountAvgSeqNatural'
-      }
+    // },
+    // gcCountAvgSeq: {
+    //   avg: {
+    //     field: 'jvm.gc.count'
+    //   }
+    // },
+    // gcCountAvgSeqNatural: {
+    //   bucket_script: {
+    //     buckets_path: {
+    //       value: 'gcCountAvgSeq'
+    //     },
+    //     script: 'params.value > 0.0 ? params.value : 0.0'
+    //   }
+    // },
+    // gcCountAvg: {
+    //   serial_diff: {
+    //     buckets_path: 'gcCountAvgSeqNatural'
+    //   }
     }
   };
 
@@ -96,11 +96,11 @@ export async function fetch(setup: Setup, serviceName: string) {
                   max_bucket: {
                     buckets_path: 'timeseriesData>gcCountMax'
                   }
-                },
-                gcCountAvg: {
-                  avg_bucket: {
-                    buckets_path: 'timeseriesData>gcCountAvg'
-                  }
+                // },
+                // gcCountAvg: {
+                //   avg_bucket: {
+                //     buckets_path: 'timeseriesData>gcCountAvg'
+                //   }
                 }
               }
             }
@@ -109,5 +109,6 @@ export async function fetch(setup: Setup, serviceName: string) {
       }
     }
   };
+  console.log(JSON.stringify(params));
   return client.search<void, JavaGcMetricsAggs<GcRateMetrics>>(params);
 }

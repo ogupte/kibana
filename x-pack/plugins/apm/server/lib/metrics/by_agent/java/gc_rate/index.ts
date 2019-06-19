@@ -9,7 +9,7 @@ import { i18n } from '@kbn/i18n';
 import { Setup } from '../../../../helpers/setup_request';
 import { fetch, GcRateMetrics } from './fetcher';
 import { ChartBase } from '../../../types';
-import { transformJavaGcDataToMetricsChart } from '../../../transform_metrics_chart';
+import { transformJavaGcDataToMetricsChart } from '../transform_java_metrics_chart';
 
 const chartBase: ChartBase<GcRateMetrics> = {
   title: i18n.translate('xpack.apm.agentMetrics.java.gcRateChartTitle', {
@@ -24,12 +24,12 @@ const chartBase: ChartBase<GcRateMetrics> = {
         defaultMessage: 'GC cycles max'
       }),
       color: theme.euiColorVis0
-    },
-    gcCountAvg: {
-      title: i18n.translate('xpack.apm.agentMetrics.java.gcCountAvg', {
-        defaultMessage: 'GC cycles avg'
-      }),
-      color: theme.euiColorVis1
+    // },
+    // gcCountAvg: {
+    //   title: i18n.translate('xpack.apm.agentMetrics.java.gcCountAvg', {
+    //     defaultMessage: 'GC cycles avg'
+    //   }),
+    //   color: theme.euiColorVis1
     }
   }
 };

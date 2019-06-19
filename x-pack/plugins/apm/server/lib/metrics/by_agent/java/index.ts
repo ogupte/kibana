@@ -15,13 +15,13 @@ import { getGCTimeChartData } from './gc_time';
 
 export async function getJavaMetricsCharts(setup: Setup, serviceName: string) {
   const charts = await Promise.all([
-    getCPUChartData(setup, serviceName),
-    getMemoryChartData(setup, serviceName),
-    getHeapMemoryChart(setup, serviceName),
-    getNonHeapMemoryChart(setup, serviceName),
-    getThreadCountChart(setup, serviceName),
+    // getCPUChartData(setup, serviceName),
+    // getMemoryChartData(setup, serviceName),
+    // getHeapMemoryChart(setup, serviceName),
+    // getNonHeapMemoryChart(setup, serviceName),
+    // getThreadCountChart(setup, serviceName),
     getGCRateChartData(setup, serviceName),
-    getGCTimeChartData(setup, serviceName)
+    // getGCTimeChartData(setup, serviceName)
   ]);
 
   return { charts };
