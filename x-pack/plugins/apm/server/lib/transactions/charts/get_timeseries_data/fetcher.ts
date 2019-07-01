@@ -134,5 +134,6 @@ export function timeseriesFetcher({
     }
   };
 
+  console.log(JSON.stringify(params));
   return client.search<void, Aggs>(params);
 }

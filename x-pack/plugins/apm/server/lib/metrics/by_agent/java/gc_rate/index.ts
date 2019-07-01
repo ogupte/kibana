@@ -24,12 +24,12 @@ const chartBase: ChartBase<GcRateMetrics> = {
         defaultMessage: 'GC cycles max'
       }),
       color: theme.euiColorVis0
-    // },
-    // gcCountAvg: {
-    //   title: i18n.translate('xpack.apm.agentMetrics.java.gcCountAvg', {
-    //     defaultMessage: 'GC cycles avg'
-    //   }),
-    //   color: theme.euiColorVis1
+    },
+    gcCountAvg: {
+      title: i18n.translate('xpack.apm.agentMetrics.java.gcCountAvg', {
+        defaultMessage: 'GC cycles avg'
+      }),
+      color: theme.euiColorVis1
     }
   }
 };
