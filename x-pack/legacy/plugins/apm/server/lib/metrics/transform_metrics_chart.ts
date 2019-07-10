@@ -7,7 +7,7 @@ import theme from '@elastic/eui/dist/eui_theme_light.json';
 import { AggregationSearchResponse, AggregatedValue } from 'elasticsearch';
 import { ChartBase } from './types';
 
-const colors = [
+export const colors = [
   theme.euiColorVis0,
   theme.euiColorVis1,
   theme.euiColorVis2,
@@ -21,7 +21,7 @@ export type GenericMetricsChart = ReturnType<
   typeof transformDataToMetricsChart
 >;
 
-interface AggregatedParams {
+export interface AggregatedParams {
   body: {
     aggs: {
       timeseriesData: {
