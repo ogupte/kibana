@@ -21,7 +21,7 @@ export const PageLoadCharts: React.SFC = () => {
   } = useUrlParams();
 
   const refreshMapEmbeddable = useCallback(
-    mapEmpeddable => {
+    mapEmbeddable => {
       const query = {
         query: `service.name:"${serviceName}" and transaction.type : "page-load"`,
         language: 'kuery'
@@ -30,7 +30,7 @@ export const PageLoadCharts: React.SFC = () => {
         from: start,
         to: end
       };
-      mapEmpeddable.updateInput({ timeRange, query });
+      mapEmbeddable.updateInput({ timeRange, query });
     },
     [serviceName, start, end]
   );
@@ -43,8 +43,8 @@ export const PageLoadCharts: React.SFC = () => {
           { viewMode: 'view', hidePanelTitles: false, isLayerTOCOpen: false },
           null
         )
-        .then((mapEmpeddable: any) => {
-          setEmbeddable(mapEmpeddable);
+        .then((mapEmbeddable: any) => {
+          setEmbeddable(mapEmbeddable);
         });
     }
 
