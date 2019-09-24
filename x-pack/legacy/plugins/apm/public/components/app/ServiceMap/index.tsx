@@ -6,16 +6,20 @@
 
 import React, { useEffect, useRef } from 'react';
 import cytoscape from 'cytoscape';
+// @ts-ignore
 import dagre from 'cytoscape-dagre';
+import { useUrlParams } from '../../../hooks/useUrlParams';
+import { useFetcher } from '../../../hooks/useFetcher';
+import { callApmApi } from '../../../services/rest/callApmApi';
 
 cytoscape.use(dagre);
 
 function useCytoscape(
   options: cytoscape.CytoscapeOptions,
   onMount?: (cy: cytoscape.Core) => void
-) {
+): [React.RefObject<HTMLDivElement>, React.RefObject<cytoscape.Core | null>] {
   const ref = useRef(null);
-  const cy = useRef(null);
+  const cy = useRef<cytoscape.Core | null>(null);
 
   useEffect(() => {
     cy.current = cytoscape({ ...options, container: ref.current });
@@ -24,24 +28,21 @@ function useCytoscape(
     }
   });
 
-  return [ref, cy.current] as [
-    React.MutableRefObject<any>,
-    cytoscape.Core | null
-  ];
+  return [ref, cy];
 }
 
 const initialCytoscapeOptions = {
-  elements: [
-    { data: { id: 'A', typeLabel: 'JS', label: 'selected instance' } },
-    { data: { id: 'B', typeLabel: 'JS', label: 'service label5' } },
-    { data: { source: 'A', target: 'B' } },
-    { data: { id: 'C', typeLabel: 'JS', label: 'checkout service' } },
-    { data: { source: 'A', target: 'C' } },
-    { data: { id: 'D', typeLabel: 'DN', label: 'payment service' } },
-    { data: { source: 'C', target: 'D' } },
-    { data: { id: 'E', typeLabel: 'CO', label: 'database' } },
-    { data: { source: 'D', target: 'E' } }
-  ],
+  // elements: [
+  //   { data: { id: 'A', typeLabel: 'JS', label: 'selected instance' } },
+  //   { data: { id: 'B', typeLabel: 'JS', label: 'service label5' } },
+  //   { data: { source: 'A', target: 'B' } },
+  //   { data: { id: 'C', typeLabel: 'JS', label: 'checkout service' } },
+  //   { data: { source: 'A', target: 'C' } },
+  //   { data: { id: 'D', typeLabel: 'DN', label: 'payment service' } },
+  //   { data: { source: 'C', target: 'D' } },
+  //   { data: { id: 'E', typeLabel: 'CO', label: 'database' } },
+  //   { data: { source: 'D', target: 'E' } }
+  // ],
   zoomingEnabled: false,
   panningEnabled: false,
   boxSelectionEnabled: false,
@@ -60,20 +61,47 @@ const initialCytoscapeOptions = {
         'target-arrow-shape': 'triangle'
       }
     }
-  ],
-  layout: {
-    // name: 'dagre',
-    // rankDir: 'LR',
-    // fit: true,
-    // nodeDimensionsIncludeLabels: false,
-    // padding: 100
-  }
+  ]
+  // layout: {
+  // name: 'dagre',
+  // rankDir: 'LR',
+  // fit: true,
+  // nodeDimensionsIncludeLabels: false,
+  // padding: 100
+  // }
 };
 
 export function ServiceMap() {
-  const [ref] = useCytoscape(initialCytoscapeOptions, cy => {
-    console.log('onmount', { cy });
+  const {
+    urlParams: { start, end },
+    uiFilters
+  } = useUrlParams();
+  const { data = [] /* , status*/ } = useFetcher(async () => {
+    if (start && end) {
+      return callApmApi({
+        pathname: '/api/apm/service-map',
+        params: { query: { start, end } }
+      });
+    }
+  }, [start, end]);
+
+  const [elRef, cyRef] = useCytoscape(initialCytoscapeOptions, cy => {
+    // console.log('onmount', { cy });
   });
 
-  return <div style={{ height: '100vh' }} ref={ref}></div>;
+  useEffect(() => {
+    if (cyRef.current) {
+      const cy = cyRef.current;
+      cy.remove('*');
+      cy.add(data);
+      cy.layout({
+        name: 'dagre',
+        fit: true,
+        nodeDimensionsIncludeLabels: false,
+        padding: 100
+      }).run();
+    }
+  }, [cyRef, data]);
+
+  return <div style={{ height: '100vh' }} ref={elRef}></div>;
 }
