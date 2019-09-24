@@ -50,6 +50,15 @@ export const routes: BreadcrumbRoute[] = [
   },
   {
     exact: true,
+    path: '/service-map',
+    component: () => <Home tab="service-map" />,
+    breadcrumb: i18n.translate('xpack.apm.breadcrumb.serviceMapTitle', {
+      defaultMessage: 'Service Map'
+    }),
+    name: RouteName.SERVICE_MAP
+  },
+  {
+    exact: true,
     path: '/traces',
     component: () => <Home tab="traces" />,
     breadcrumb: i18n.translate('xpack.apm.breadcrumb.tracesTitle', {
@@ -114,6 +123,16 @@ export const routes: BreadcrumbRoute[] = [
       defaultMessage: 'Metrics'
     }),
     name: RouteName.METRICS
+  },
+  // service map
+  {
+    exact: true,
+    path: '/services/:serviceName/service-map',
+    component: () => <ServiceDetails tab="service-map" />,
+    breadcrumb: i18n.translate('xpack.apm.breadcrumb.serviceMapTitle', {
+      defaultMessage: 'Service Map'
+    }),
+    name: RouteName.SINGLE_SERVICE_MAP
   },
   {
     exact: true,

@@ -42,6 +42,7 @@ import {
   uiFiltersEnvironmentsRoute
 } from './ui_filters';
 import { createApi } from './create_api';
+import { serviceMapRoute } from './services';
 
 const createApmApi = () => {
   const api = createApi()
@@ -73,7 +74,8 @@ const createApmApi = () => {
     .add(tracesLocalFiltersRoute)
     .add(transactionGroupsLocalFiltersRoute)
     .add(transactionsLocalFiltersRoute)
-    .add(uiFiltersEnvironmentsRoute);
+    .add(uiFiltersEnvironmentsRoute)
+    .add(serviceMapRoute);
 
   return api;
 };

@@ -18,9 +18,11 @@ import { useUrlParams } from '../../../hooks/useUrlParams';
 import { TransactionOverviewLink } from '../../shared/Links/apm/TransactionOverviewLink';
 import { ErrorOverviewLink } from '../../shared/Links/apm/ErrorOverviewLink';
 import { MetricOverviewLink } from '../../shared/Links/apm/MetricOverviewLink';
+import { ServiceMap } from '../ServiceMap';
+import { ServiceMapLink } from '../../shared/Links/apm/ServiceMapLink';
 
 interface Props {
-  tab: 'transactions' | 'errors' | 'metrics';
+  tab: 'transactions' | 'errors' | 'metrics' | 'service-map';
 }
 
 export function ServiceDetailTabs({ tab }: Props) {
@@ -85,6 +87,20 @@ export function ServiceDetailTabs({ tab }: Props) {
 
     tabs.push(metricsTab);
   }
+
+  const serviceMapTab = {
+    link: (
+      <ServiceMapLink serviceName={serviceName}>
+        {i18n.translate('xpack.apm.home.serviceMapTabLabel', {
+          defaultMessage: 'Service Map'
+        })}
+      </ServiceMapLink>
+    ),
+    render: () => <ServiceMap serviceName={serviceName} />,
+    name: 'service-map'
+  };
+
+  tabs.push(serviceMapTab);
 
   const selectedTab = tabs.find(serviceTab => serviceTab.name === tab);
 

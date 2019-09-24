@@ -13,6 +13,7 @@ import { getServices } from '../lib/services/get_services';
 import { getServiceTransactionTypes } from '../lib/services/get_service_transaction_types';
 import { createRoute } from './create_route';
 import { uiFiltersRt, rangeRt } from './default_api_types';
+import { getServiceMap } from '../lib/services/map';
 
 export const servicesRoute = createRoute(core => ({
   path: '/api/apm/services',
@@ -62,5 +63,27 @@ export const serviceTransactionTypesRoute = createRoute(() => ({
     const setup = await setupRequest(req);
     const { serviceName } = path;
     return getServiceTransactionTypes(serviceName, setup);
+  }
+}));
+
+export const serviceMapRoute = createRoute(() => ({
+  path: '/api/apm/service-map',
+  // params: {
+  //   path: t.type({
+  //     serviceName: t.string
+  //   }),
+  //   query: rangeRt
+  // },
+  // handler: async (req, { path }) => {
+  //   const setup = await setupRequest(req);
+  //   const { serviceName } = path;
+  //   return getServiceMap(serviceName, setup);
+  // }
+  params: {
+    query: rangeRt
+  },
+  handler: async req => {
+    const setup = await setupRequest(req);
+    return getServiceMap(setup);
   }
 }));

@@ -82,6 +82,11 @@ export function getPathParams(pathname: string = '') {
             processorEvent: 'metric',
             serviceName
           };
+        case 'service-map':
+          return {
+            processorEvent: 'service-map',
+            serviceName
+          };
         default:
           return {
             processorEvent: 'transaction'
