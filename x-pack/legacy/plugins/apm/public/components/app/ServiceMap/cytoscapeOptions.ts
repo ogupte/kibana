@@ -25,17 +25,18 @@ const style: cytoscape.Stylesheet[] = [
   {
     selector: 'node',
     style: {
+      cursor: 'pointer',
       'background-color': 'white',
       // The DefinitelyTyped definitions don't specify that a function can be
       // used here.
       //
       // @ts-ignore
       'background-image': (el: cytoscape.NodeSingular) =>
-        icons[el.data().agentName] || defaultIcon,
+        icons[el.data('agentName')] || defaultIcon,
       'background-height': (el: cytoscape.NodeSingular) =>
-        isDatabaseOrExternal(el.data().agentName) ? '40%' : '80%',
+        isDatabaseOrExternal(el.data('agentName')) ? '40%' : '80%',
       'background-width': (el: cytoscape.NodeSingular) =>
-        isDatabaseOrExternal(el.data().agentName) ? '40%' : '80%',
+        isDatabaseOrExternal(el.data('agentName')) ? '40%' : '80%',
       'border-color': (el: cytoscape.NodeSingular) =>
         el.hasClass('primary')
           ? theme.euiColorSecondary
@@ -49,8 +50,9 @@ const style: cytoscape.Stylesheet[] = [
       height: theme.avatarSizing.l.size,
       label: 'data(id)',
       'min-zoomed-font-size': theme.euiSizeL,
+      'overlay-opacity': 0,
       shape: (el: cytoscape.NodeSingular) =>
-        isDatabaseOrExternal(el.data().agentName) ? 'diamond' : 'ellipse',
+        isDatabaseOrExternal(el.data('agentName')) ? 'diamond' : 'ellipse',
       'text-margin-y': theme.paddingSizes.s,
       'text-max-width': '85px',
       'text-valign': 'bottom',
@@ -63,6 +65,7 @@ const style: cytoscape.Stylesheet[] = [
     style: {
       'curve-style': 'bezier',
       'line-color': theme.euiColorMediumShade,
+      'overlay-opacity': 0,
       'target-arrow-color': theme.euiColorMediumShade,
       'target-arrow-shape': 'triangle',
       // The DefinitelyTyped definitions don't specify this property since it's
