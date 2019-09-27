@@ -25,7 +25,6 @@ const style: cytoscape.Stylesheet[] = [
   {
     selector: 'node',
     style: {
-      cursor: 'pointer',
       'background-color': 'white',
       // The DefinitelyTyped definitions don't specify that a function can be
       // used here.
@@ -53,6 +52,10 @@ const style: cytoscape.Stylesheet[] = [
       'overlay-opacity': 0,
       shape: (el: cytoscape.NodeSingular) =>
         isDatabaseOrExternal(el.data('agentName')) ? 'diamond' : 'ellipse',
+      'text-background-color': theme.euiColorLightestShade,
+      'text-background-opacity': 1,
+      'text-background-padding': theme.paddingSizes.xs,
+      'text-background-shape': 'roundrectangle',
       'text-margin-y': theme.paddingSizes.s,
       'text-max-width': '85px',
       'text-valign': 'bottom',

@@ -13,12 +13,21 @@ import { callApmApi } from '../../../services/rest/callApmApi';
 import { Cytoscape } from './Cytoscape';
 
 const Background = styled('div')`
-  background-image: radial-gradient(
-    ${theme.euiColorLightShade} 20%,
-    transparent 1%
-  );
-  background-color: ${theme.euiColorLightestShade};
-  background-size: ${theme.paddingSizes.s} ${theme.paddingSizes.s};
+  background: linear-gradient(
+        90deg,
+        ${theme.euiColorLightestShade}
+          calc(${theme.euiSizeL} - calc(${theme.euiSizeXS} / 2)),
+        transparent 1%
+      )
+      center,
+    linear-gradient(
+        ${theme.euiColorLightestShade}
+          calc(${theme.euiSizeL} - calc(${theme.euiSizeXS} / 2)),
+        transparent 1%
+      )
+      center,
+    ${theme.euiColorLightShade};
+  background-size: ${theme.euiSizeL} ${theme.euiSizeL};
   margin: -${theme.gutterTypes.gutterLarge};
 `;
 
