@@ -15,13 +15,13 @@ import { Cytoscape } from './Cytoscape';
 const Background = styled('div')`
   background: linear-gradient(
         90deg,
-        ${theme.euiColorLightestShade}
+        ${theme.euiPageBackgroundColor}
           calc(${theme.euiSizeL} - calc(${theme.euiSizeXS} / 2)),
         transparent 1%
       )
       center,
     linear-gradient(
-        ${theme.euiColorLightestShade}
+        ${theme.euiPageBackgroundColor}
           calc(${theme.euiSizeL} - calc(${theme.euiSizeXS} / 2)),
         transparent 1%
       )
