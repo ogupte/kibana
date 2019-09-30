@@ -53,7 +53,7 @@ const style: cytoscape.Stylesheet[] = [
       shape: (el: cytoscape.NodeSingular) =>
         isDatabaseOrExternal(el.data('agentName')) ? 'diamond' : 'ellipse',
       'text-background-color': theme.euiColorLightestShade,
-      'text-background-opacity': 1,
+      'text-background-opacity': 0,
       'text-background-padding': theme.paddingSizes.xs,
       'text-background-shape': 'roundrectangle',
       'text-margin-y': theme.paddingSizes.s,
