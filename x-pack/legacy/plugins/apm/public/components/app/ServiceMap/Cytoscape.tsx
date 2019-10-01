@@ -4,14 +4,26 @@
  * you may not use this file except in compliance with the Elastic License.
  */
 
-import React, { CSSProperties, useState, useRef, useEffect } from 'react';
+import React, {
+  CSSProperties,
+  useState,
+  useRef,
+  useEffect,
+  ReactNode,
+  createContext
+} from 'react';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import { cytoscapeOptions } from './cytoscapeOptions';
 
 cytoscape.use(dagre);
 
+export const CytoscapeContext = createContext<cytoscape.Core | undefined>(
+  undefined
+);
+
 interface CytoscapeProps {
+  children?: ReactNode;
   elements: cytoscape.ElementDefinition[];
   serviceName?: string;
   style: CSSProperties;
@@ -30,7 +42,12 @@ function useCytoscape(options: cytoscape.CytoscapeOptions) {
   return [ref, cy] as [React.MutableRefObject<any>, cytoscape.Core | undefined];
 }
 
-export function Cytoscape({ elements, serviceName, style }: CytoscapeProps) {
+export function Cytoscape({
+  children,
+  elements,
+  serviceName,
+  style
+}: CytoscapeProps) {
   const [ref, cy] = useCytoscape({ ...cytoscapeOptions, elements });
 
   // Trigger a custom "data" event when data changes
@@ -57,5 +74,11 @@ export function Cytoscape({ elements, serviceName, style }: CytoscapeProps) {
     }
   }, [cy, serviceName]);
 
-  return <div ref={ref} style={style} />;
+  return (
+    <CytoscapeContext.Provider value={cy}>
+      <div ref={ref} style={style}>
+        {children}
+      </div>
+    </CytoscapeContext.Provider>
+  );
 }

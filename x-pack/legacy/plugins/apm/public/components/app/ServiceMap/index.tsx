@@ -5,37 +5,36 @@
  */
 
 import React from 'react';
-import styled from 'styled-components';
 import theme from '@elastic/eui/dist/eui_theme_light.json';
 import { useUrlParams } from '../../../hooks/useUrlParams';
 import { useFetcher } from '../../../hooks/useFetcher';
 import { callApmApi } from '../../../services/rest/callApmApi';
 import { Cytoscape } from './Cytoscape';
-
-const Background = styled('div')`
-  background: linear-gradient(
-        90deg,
-        ${theme.euiPageBackgroundColor}
-          calc(${theme.euiSizeL} - calc(${theme.euiSizeXS} / 2)),
-        transparent 1%
-      )
-      center,
-    linear-gradient(
-        ${theme.euiPageBackgroundColor}
-          calc(${theme.euiSizeL} - calc(${theme.euiSizeXS} / 2)),
-        transparent 1%
-      )
-      center,
-    ${theme.euiColorLightShade};
-  background-size: ${theme.euiSizeL} ${theme.euiSizeL};
-  margin: -${theme.gutterTypes.gutterLarge};
-`;
+import { Controls } from './Controls';
 
 interface ServiceMapProps {
   serviceName?: string;
 }
 
-const cytoscapeDivStyle = { height: '85vh' };
+const cytoscapeDivStyle = {
+  height: '85vh',
+  background: `linear-gradient(
+  90deg,
+  ${theme.euiPageBackgroundColor}
+    calc(${theme.euiSizeL} - calc(${theme.euiSizeXS} / 2)),
+  transparent 1%
+)
+center,
+linear-gradient(
+  ${theme.euiPageBackgroundColor}
+    calc(${theme.euiSizeL} - calc(${theme.euiSizeXS} / 2)),
+  transparent 1%
+)
+center,
+${theme.euiColorLightShade}`,
+  backgroundSize: `${theme.euiSizeL} ${theme.euiSizeL}`,
+  margin: `-${theme.gutterTypes.gutterLarge}`
+};
 
 export function ServiceMap({ serviceName }: ServiceMapProps) {
   const {
@@ -52,12 +51,12 @@ export function ServiceMap({ serviceName }: ServiceMapProps) {
   }, [start, end]);
 
   return (
-    <Background>
-      <Cytoscape
-        elements={data}
-        serviceName={serviceName}
-        style={cytoscapeDivStyle}
-      />
-    </Background>
+    <Cytoscape
+      elements={data}
+      serviceName={serviceName}
+      style={cytoscapeDivStyle}
+    >
+      <Controls />
+    </Cytoscape>
   );
 }
