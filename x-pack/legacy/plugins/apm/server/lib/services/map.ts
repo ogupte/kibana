@@ -7,13 +7,9 @@ import cytoscape from 'cytoscape';
 import { PromiseReturnType } from '../../../typings/common';
 import { Setup } from '../helpers/setup_request';
 
+// This response right now just returns experimental data.
 export type ServiceMapResponse = PromiseReturnType<typeof getServiceMap>;
-export async function getServiceMap(
-  // serviceName: string,
-  setup: Setup
-): Promise<cytoscape.ElementDefinition[]> {
-  // const { start, end, client, config } = setup;
-
+export async function getServiceMap(): Promise<cytoscape.ElementDefinition[]> {
   return [
     { data: { id: 'client', agentName: 'js-base' } },
     { data: { id: 'opbeans-node', agentName: 'nodejs' } },

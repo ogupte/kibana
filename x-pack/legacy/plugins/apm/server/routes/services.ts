@@ -68,17 +68,6 @@ export const serviceTransactionTypesRoute = createRoute(() => ({
 
 export const serviceMapRoute = createRoute(() => ({
   path: '/api/apm/service-map',
-  // params: {
-  //   path: t.type({
-  //     serviceName: t.string
-  //   }),
-  //   query: rangeRt
-  // },
-  // handler: async (req, { path }) => {
-  //   const setup = await setupRequest(req);
-  //   const { serviceName } = path;
-  //   return getServiceMap(serviceName, setup);
-  // }
   params: {
     query: rangeRt
   },
