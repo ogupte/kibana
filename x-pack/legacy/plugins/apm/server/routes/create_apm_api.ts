@@ -3,6 +3,8 @@
  * or more contributor license agreements. Licensed under the Elastic License;
  * you may not use this file except in compliance with the Elastic License.
  */
+
+import { KibanaConfig } from 'src/legacy/server/kbn_server';
 import { indexPatternRoute } from './index_pattern';
 import {
   errorDistributionRoute,

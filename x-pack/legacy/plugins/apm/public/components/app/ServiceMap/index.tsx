@@ -41,7 +41,7 @@ export function ServiceMap({ serviceName }: ServiceMapProps) {
     urlParams: { start, end }
   } = useUrlParams();
 
-  const { data = [] } = useFetcher(async () => {
+  const { data } = useFetcher(async () => {
     if (start && end) {
       return callApmApi({
         pathname: '/api/apm/service-map',
@@ -50,9 +50,11 @@ export function ServiceMap({ serviceName }: ServiceMapProps) {
     }
   }, [start, end]);
 
+  const elements = Array.isArray(data) ? data : [];
+
   return (
     <Cytoscape
-      elements={data}
+      elements={elements}
       serviceName={serviceName}
       style={cytoscapeDivStyle}
     >

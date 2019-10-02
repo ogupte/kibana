@@ -13,6 +13,7 @@ import {
   EuiSpacer
 } from '@elastic/eui';
 import { i18n } from '@kbn/i18n';
+import { npStart } from 'ui/new_platform';
 import React from 'react';
 import { $ElementType } from 'utility-types';
 import { ApmHeader } from '../../shared/ApmHeader';
@@ -48,8 +49,11 @@ const homeTabs = [
     ),
     render: () => <TraceOverview />,
     name: 'traces'
-  },
-  {
+  }
+];
+
+if (npStart.core.injectedMetadata.getInjectedVar('apmServiceMapEnabled')) {
+  homeTabs.push({
     link: (
       <ServiceMapLink>
         {i18n.translate('xpack.apm.home.serviceMapTabLabel', {
@@ -59,8 +63,8 @@ const homeTabs = [
     ),
     render: () => <ServiceMap />,
     name: 'service-map'
-  }
-];
+  });
+}
 
 const SETTINGS_LINK_LABEL = i18n.translate('xpack.apm.settingsLinkLabel', {
   defaultMessage: 'Settings'

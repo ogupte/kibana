@@ -7,6 +7,7 @@
 import { i18n } from '@kbn/i18n';
 import React from 'react';
 import { EuiTabs, EuiSpacer } from '@elastic/eui';
+import { npStart } from 'ui/new_platform';
 import { ErrorGroupOverview } from '../ErrorGroupOverview';
 import { TransactionOverview } from '../TransactionOverview';
 import { ServiceMetrics } from '../ServiceMetrics';
@@ -100,7 +101,9 @@ export function ServiceDetailTabs({ tab }: Props) {
     name: 'service-map'
   };
 
-  tabs.push(serviceMapTab);
+  if (npStart.core.injectedMetadata.getInjectedVar('apmServiceMapEnabled')) {
+    tabs.push(serviceMapTab);
+  }
 
   const selectedTab = tabs.find(serviceTab => serviceTab.name === tab);
 

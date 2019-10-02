@@ -71,8 +71,12 @@ export const serviceMapRoute = createRoute(() => ({
   params: {
     query: rangeRt
   },
-  handler: async req => {
-    const setup = await setupRequest(req);
-    return getServiceMap(setup);
+  handler: async (request, _response, hapi) => {
+    const setup = await setupRequest(request);
+    if (setup.config.get('xpack.apm.serviceMapEnabled')) {
+      return getServiceMap();
+    } else {
+      return hapi.response().code(404);
+    }
   }
 }));

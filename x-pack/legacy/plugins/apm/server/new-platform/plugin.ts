@@ -12,7 +12,7 @@ import { createApmApi } from '../routes/create_apm_api';
 
 export class Plugin {
   public setup(core: InternalCoreSetup) {
-    createApmApi().init(core);
+    createApmApi(core.http.server.config()).init(core);
     createApmAgentConfigurationIndex(core);
     makeApmUsageCollector(core as CoreSetupWithUsageCollector);
   }

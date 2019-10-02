@@ -5,7 +5,6 @@
  */
 import cytoscape from 'cytoscape';
 import { PromiseReturnType } from '../../../typings/common';
-import { Setup } from '../helpers/setup_request';
 
 // This response right now just returns experimental data.
 export type ServiceMapResponse = PromiseReturnType<typeof getServiceMap>;
