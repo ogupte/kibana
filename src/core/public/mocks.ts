@@ -18,7 +18,7 @@
  */
 import { applicationServiceMock } from './application/application_service.mock';
 import { chromeServiceMock } from './chrome/chrome_service.mock';
-import { CoreSetup, CoreStart, PluginInitializerContext } from '.';
+import { CoreSetup, LegacyCoreStart, PluginInitializerContext } from '.';
 import { docLinksServiceMock } from './doc_links/doc_links_service.mock';
 import { fatalErrorsServiceMock } from './fatal_errors/fatal_errors_service.mock';
 import { httpServiceMock } from './http/http_service.mock';
@@ -55,7 +55,7 @@ function createCoreSetupMock() {
 }
 
 function createCoreStartMock() {
-  const mock: MockedKeys<CoreStart> = {
+  const mock: MockedKeys<LegacyCoreStart> = {
     application: applicationServiceMock.createStartContract(),
     chrome: chromeServiceMock.createStartContract(),
     docLinks: docLinksServiceMock.createStartContract(),
