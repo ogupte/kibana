@@ -58,14 +58,6 @@ exports[`Home component should render services 1`] = `
         Traces
       </TraceOverviewLink>
     </EuiTabLink>
-    <EuiTabLink
-      isSelected={false}
-      key="service-map"
-    >
-      <ServiceMapLink>
-        Service Map
-      </ServiceMapLink>
-    </EuiTabLink>
   </EuiTabs>
   <EuiSpacer />
   <ServiceOverview />
@@ -129,14 +121,6 @@ exports[`Home component should render traces 1`] = `
       <TraceOverviewLink>
         Traces
       </TraceOverviewLink>
-    </EuiTabLink>
-    <EuiTabLink
-      isSelected={false}
-      key="service-map"
-    >
-      <ServiceMapLink>
-        Service Map
-      </ServiceMapLink>
     </EuiTabLink>
   </EuiTabs>
   <EuiSpacer />

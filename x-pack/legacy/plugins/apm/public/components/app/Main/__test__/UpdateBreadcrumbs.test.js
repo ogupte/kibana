@@ -19,7 +19,6 @@ const coreMock = {
     setBreadcrumbs: jest.fn()
   }
 };
-
 jest.spyOn(kibanaCore, 'useKibanaCore').mockReturnValue(coreMock);
 
 function expectBreadcrumbToMatchSnapshot(route, params = '') {
