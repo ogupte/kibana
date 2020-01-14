@@ -105,6 +105,13 @@ export function getCytoscapeElements(
         };
       }
 
+      if ('span.type' in node) {
+        data = {
+          type: node['span.type'],
+          subtype: node['span.subtype']
+        };
+      }
+
       return {
         group: 'nodes' as const,
         data: {
