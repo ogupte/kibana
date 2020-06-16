@@ -37,6 +37,7 @@ export interface Setup {
   client: ESClient;
   internalClient: ESClient;
   ml?: ReturnType<typeof getMlSetup>;
+  alerting: APMRequestHandlerContext['alerting'];
   config: APMConfig;
   indices: ApmIndicesConfig;
   dynamicIndexPattern?: IIndexPattern;
@@ -95,6 +96,7 @@ export async function setupRequest<TParams extends SetupRequestParams>(
       clientAsInternalUser: true,
     }),
     ml: getMlSetup(context, request),
+    alerting: context.alerting,
     config,
     dynamicIndexPattern,
   };

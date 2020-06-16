@@ -13,6 +13,7 @@ import {
 import { setupRequest } from '../lib/helpers/setup_request';
 import { getServiceMap } from '../lib/service_map/get_service_map';
 import { getServiceMapServiceNodeInfo } from '../lib/service_map/get_service_map_service_node_info';
+import { getServiceAlerts } from '../lib/service_map/get_service_alerts';
 import { createRoute } from './create_route';
 import { rangeRt } from './default_api_types';
 
@@ -75,5 +76,13 @@ export const serviceMapServiceNodeRoute = createRoute(() => ({
       serviceName,
       environment,
     });
+  },
+}));
+
+export const serviceAlertsRoute = createRoute(() => ({
+  path: '/api/apm/service-map/alerts',
+  handler: async ({ context, request }) => {
+    const setup = await setupRequest(context, request);
+    return getServiceAlerts(setup, []);
   },
 }));

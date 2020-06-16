@@ -60,7 +60,11 @@ import {
   uiFiltersEnvironmentsRoute,
 } from './ui_filters';
 import { createApi } from './create_api';
-import { serviceMapRoute, serviceMapServiceNodeRoute } from './service_map';
+import {
+  serviceMapRoute,
+  serviceMapServiceNodeRoute,
+  serviceAlertsRoute,
+} from './service_map';
 import { indicesPrivilegesRoute } from './security';
 import {
   createCustomLinkRoute,
@@ -137,6 +141,7 @@ const createApmApi = () => {
     // Service map
     .add(serviceMapRoute)
     .add(serviceMapServiceNodeRoute)
+    .add(serviceAlertsRoute)
 
     // security
     .add(indicesPrivilegesRoute)
