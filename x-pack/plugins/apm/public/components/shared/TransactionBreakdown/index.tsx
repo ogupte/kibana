@@ -52,7 +52,9 @@ const TransactionBreakdown: React.FC<{
         </EuiFlexItem>
         {showChart ? (
           <EuiFlexItem grow={false}>
-            <TransactionBreakdownGraph timeseries={timeseries} />
+            <TransactionBreakdownGraph
+              timeseries={fillTimeseriesGaps(timeseries)}
+            />
           </EuiFlexItem>
         ) : null}
       </EuiFlexGroup>
@@ -61,3 +63,28 @@ const TransactionBreakdown: React.FC<{
 };
 
 export { TransactionBreakdown };
+
+interface Timeserie {
+  title: string;
+  color: string;
+  type: string;
+  data: Array<{
+    x: number;
+    y: number | null;
+  }>;
+  hideLegend: boolean;
+}
+
+function fillTimeseriesGaps(timeseries: Timeserie[]) {
+  return timeseries.map((timeserie) => {
+    const data: Timeserie['data'] = timeserie.data.map(
+      (point, index, dataArray) => {
+        if (point.y === null) {
+          return { x: point.x, y: dataArray[index - 1]?.y ?? null };
+        }
+        return point;
+      }
+    );
+    return { ...timeserie, data };
+  });
+}
