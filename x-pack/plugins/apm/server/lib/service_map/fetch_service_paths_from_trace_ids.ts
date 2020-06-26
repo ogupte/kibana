@@ -50,7 +50,7 @@ export async function fetchServicePathsFromTraceIds(
               lang: 'painless',
               source: `state.eventsById = new HashMap();
 
-              ArrayList fieldsToCopy = new ArrayList([
+              String[] fieldsToCopy = new String[] {
                   'parent.id',
                   'service.name',
                   'service.environment',
@@ -60,7 +60,7 @@ export async function fetchServicePathsFromTraceIds(
                   'span.type',
                   'span.subtype',
                   'agent.name'
-                ]);
+                };
                 state.fieldsToCopy = fieldsToCopy;`,
             },
             map_script: {
