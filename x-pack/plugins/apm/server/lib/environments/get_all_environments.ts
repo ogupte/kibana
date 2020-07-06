@@ -10,6 +10,7 @@ import {
   SERVICE_NAME,
   SERVICE_ENVIRONMENT,
 } from '../../../common/elasticsearch_fieldnames';
+import { ENVIRONMENT_NOT_DEFINED } from '../../../common/environment_filter_values';
 
 export async function getAllEnvironments({
   serviceName,
@@ -47,6 +48,7 @@ export async function getAllEnvironments({
         environments: {
           terms: {
             field: SERVICE_ENVIRONMENT,
+            missing: ENVIRONMENT_NOT_DEFINED,
             size: 100,
           },
         },

@@ -5,6 +5,7 @@
  */
 
 import { i18n } from '@kbn/i18n';
+import { ENVIRONMENT_NOT_DEFINED } from '../environment_filter_values';
 
 export const ALL_OPTION_VALUE = 'ALL_OPTION_VALUE';
 
@@ -14,6 +15,12 @@ export function getOptionLabel(value: string | undefined) {
   if (value === undefined || value === ALL_OPTION_VALUE) {
     return i18n.translate('xpack.apm.agentConfig.allOptionLabel', {
       defaultMessage: 'All',
+    });
+  }
+
+  if (value === ENVIRONMENT_NOT_DEFINED) {
+    return i18n.translate('xpack.apm.filter.environment.notDefinedLabel', {
+      defaultMessage: 'Not defined',
     });
   }
 

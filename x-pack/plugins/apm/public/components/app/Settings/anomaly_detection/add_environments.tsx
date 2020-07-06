@@ -44,8 +44,8 @@ export const AddEnvironments = ({
     { preservePreviousData: false }
   );
 
-  const environments = [...data, ENVIRONMENT_NOT_DEFINED];
-  const environmentOptions = environments.map((env) => ({
+  // const environments = [...data, ENVIRONMENT_NOT_DEFINED];
+  const environmentOptions = data.map((env) => ({
     label: env === ENVIRONMENT_NOT_DEFINED ? NOT_DEFINED_OPTION_LABEL : env,
     value: env,
     disabled: currentEnvironments.includes(env),
