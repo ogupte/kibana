@@ -14,6 +14,7 @@ import React, {
 } from 'react';
 import cytoscape from 'cytoscape';
 import { debounce } from 'lodash';
+import dagre from 'cytoscape-dagre';
 import { useTheme } from '../../../hooks/useTheme';
 import {
   getAnimationOptions,
@@ -21,6 +22,8 @@ import {
   getNodeHeight,
 } from './cytoscapeOptions';
 import { useUiTracker } from '../../../../../observability/public';
+
+cytoscape.use(dagre);
 
 export const CytoscapeContext = createContext<cytoscape.Core | undefined>(
   undefined
@@ -33,6 +36,8 @@ interface CytoscapeProps {
   width: number;
   serviceName?: string;
   style?: CSSProperties;
+  layout?: string;
+  edgeType?: string;
 }
 
 function useCytoscape(options: cytoscape.CytoscapeOptions) {
@@ -69,6 +74,49 @@ function rotatePoint(
     x: x * cosθ - y * sinθ,
     y: x * sinθ + y * cosθ,
   };
+}
+
+function getDagreLayout(cy: cytoscape.Core) {
+  let longestPathSize = 1;
+  cy.elements().depthFirstSearch({
+    root: cy.nodes().roots(),
+    visit(v, e, u, i, depth) {
+      longestPathSize = Math.max(longestPathSize, depth);
+    },
+  });
+
+  return cy.layout({
+    name: 'dagre',
+    // transform: (node: any, pos: cytoscape.Position) => rotatePoint(pos, -90),
+    fit: true,
+    // padding: nodeHeight,
+    spacingFactor: 1.2,
+    // boundingBox: { x1: 0, y1: 0, w: height, h: width },
+    nodeSep: 64,
+    edgeSep: 10,
+    rankSep: 64,
+    rankDir: 'LR',
+    ranker: 'network-simplex', // 'network-simplex', 'tight-tree', 'longest-path'
+    // minLen: (edge: cytoscape.EdgeSingular) => {
+    //   const source = edge.source();
+    //   const target = edge.target();
+    //   if (source.data('agent.name') === 'rum-js' && target.data('span.type')) {
+    //     return longestPathSize;
+    //   }
+    //   return 1;
+    // },
+    // edgeWeight: (edge: cytoscape.EdgeSingular) => {
+    //   const source = edge.source();
+    //   const target = edge.target();
+    //   if (source.data('agent.name') && target.data('agent.name')) {
+    //     if (source.data('agent.name') === target.data('agent.name')) {
+    //       return 4;
+    //     }
+    //     return 2;
+    //   }
+    //   return 1;
+    // },
+  });
 }
 
 function getLayoutOptions(
@@ -112,10 +160,12 @@ export function Cytoscape({
   width,
   serviceName,
   style,
+  layout,
+  edgeType,
 }: CytoscapeProps) {
   const theme = useTheme();
   const [ref, cy] = useCytoscape({
-    ...getCytoscapeOptions(theme),
+    ...getCytoscapeOptions(theme, layout, edgeType),
     elements,
   });
 
@@ -153,11 +203,13 @@ export function Cytoscape({
         }
 
         const selectedRoots = selectRoots(event.cy);
-        const layout = cy.layout(
-          getLayoutOptions(selectedRoots, height, width, nodeHeight)
-        );
-
-        layout.run();
+        if (layout === 'dagre') {
+          getDagreLayout(cy).run();
+        } else {
+          cy.layout(
+            getLayoutOptions(selectedRoots, height, width, nodeHeight)
+          ).run();
+        }
       }
     };
     let layoutstopDelayTimeout: NodeJS.Timeout;
@@ -251,6 +303,7 @@ export function Cytoscape({
     width,
     nodeHeight,
     theme,
+    layout,
   ]);
 
   return (

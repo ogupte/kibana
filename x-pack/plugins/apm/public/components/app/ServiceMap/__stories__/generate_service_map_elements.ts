@@ -146,7 +146,7 @@ const NAMES = [
   'leech',
   'loki',
   'longshot',
-  'lumpkin,',
+  'lumpkin',
   'madame-web',
   'magician',
   'magneto',

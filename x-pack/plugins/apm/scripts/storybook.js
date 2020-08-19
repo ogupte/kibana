@@ -10,6 +10,11 @@ import { join } from 'path';
 require('@kbn/storybook').runStorybookCli({
   name: 'apm',
   storyGlobs: [
-    join(__dirname, '..', 'public', 'components', '**', '*.stories.tsx'),
+    // join(__dirname, '..', 'public', 'components', '**', '*.stories.tsx'),
+    join(
+      __dirname,
+      '..',
+      'public/components/app/ServiceMap/__stories__/CytoscapeExampleData.stories.tsx'
+    ),
   ],
 });

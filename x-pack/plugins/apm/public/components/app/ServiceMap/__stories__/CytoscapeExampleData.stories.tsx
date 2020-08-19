@@ -14,6 +14,7 @@ import {
   EuiForm,
   EuiSpacer,
   EuiToolTip,
+  EuiSelect,
 } from '@elastic/eui';
 import { storiesOf } from '@storybook/react';
 import React, { useEffect, useState } from 'react';
@@ -45,6 +46,8 @@ storiesOf(STORYBOOK_PATH, module)
       const [elements, setElements] = useState<any[]>(
         generateServiceMapElements(size)
       );
+      const [layout, setLayout] = useState<string>('');
+      const [edgeType, setEdgeType] = useState<string>('taxi');
 
       return (
         <div>
@@ -77,9 +80,46 @@ storiesOf(STORYBOOK_PATH, module)
                 Get JSON
               </EuiButton>
             </EuiFlexItem>
+            <EuiFlexItem>
+              <EuiSelect
+                prepend="Layout"
+                options={[
+                  { value: '', text: 'default' },
+                  { value: 'dagre', text: 'dagre' },
+                ]}
+                value={layout}
+                onChange={(e) => {
+                  setLayout(e.target.value);
+                }}
+              />
+            </EuiFlexItem>
+            <EuiFlexItem>
+              <EuiSelect
+                prepend="Edge type"
+                options={[
+                  { value: 'taxi', text: 'taxi' },
+                  { value: 'unbundled-bezier', text: 'unbundled-bezier' },
+                  { value: 'bezier', text: 'bezier' },
+                  { value: 'straight', text: 'straight' },
+                  { value: 'segments', text: 'segments' },
+                  { value: 'haystack', text: 'haystack' },
+                ]}
+                value={edgeType}
+                onChange={(e) => {
+                  setEdgeType(e.target.value);
+                }}
+              />
+            </EuiFlexItem>
           </EuiFlexGroup>
 
-          <Cytoscape elements={elements} height={600} width={1340} />
+          <Cytoscape
+            elements={elements}
+            height={600}
+            width={1340}
+            key={`${layout}-${edgeType}`}
+            layout={layout}
+            edgeType={edgeType}
+          />
 
           {json && (
             <EuiCodeEditor
@@ -238,6 +278,46 @@ storiesOf(STORYBOOK_PATH, module)
 storiesOf(STORYBOOK_PATH, module)
   .addDecorator((storyFn) => <EuiThemeProvider>{storyFn()}</EuiThemeProvider>)
   .add(
+    'Opbeans + beats - dagre',
+    () => {
+      const [edgeType, setEdgeType] = useState<string>('unbundled-bezier');
+
+      return (
+        <div>
+          <EuiSelect
+            prepend="Edge type"
+            options={[
+              { value: 'taxi', text: 'taxi' },
+              { value: 'unbundled-bezier', text: 'unbundled-bezier' },
+              { value: 'bezier', text: 'bezier' },
+              { value: 'straight', text: 'straight' },
+              { value: 'segments', text: 'segments' },
+              { value: 'haystack', text: 'haystack' },
+            ]}
+            value={edgeType}
+            onChange={(e) => {
+              setEdgeType(e.target.value);
+            }}
+          />
+          <Cytoscape
+            elements={exampleResponseOpbeansBeats.elements}
+            height={600}
+            width={1340}
+            layout="dagre"
+            key={edgeType}
+            edgeType={edgeType}
+          />
+        </div>
+      );
+    },
+    {
+      info: { propTables: false, source: false },
+    }
+  );
+
+storiesOf(STORYBOOK_PATH, module)
+  .addDecorator((storyFn) => <EuiThemeProvider>{storyFn()}</EuiThemeProvider>)
+  .add(
     'Hipster store',
     () => {
       return (
@@ -246,6 +326,45 @@ storiesOf(STORYBOOK_PATH, module)
             elements={exampleResponseHipsterStore.elements}
             height={600}
             width={1340}
+          />
+        </div>
+      );
+    },
+    {
+      info: { propTables: false, source: false },
+    }
+  );
+
+storiesOf(STORYBOOK_PATH, module)
+  .addDecorator((storyFn) => <EuiThemeProvider>{storyFn()}</EuiThemeProvider>)
+  .add(
+    'Hipster store - dagre',
+    () => {
+      const [edgeType, setEdgeType] = useState<string>('unbundled-bezier');
+      return (
+        <div>
+          <EuiSelect
+            prepend="Edge type"
+            options={[
+              { value: 'taxi', text: 'taxi' },
+              { value: 'unbundled-bezier', text: 'unbundled-bezier' },
+              { value: 'bezier', text: 'bezier' },
+              { value: 'straight', text: 'straight' },
+              { value: 'segments', text: 'segments' },
+              { value: 'haystack', text: 'haystack' },
+            ]}
+            value={edgeType}
+            onChange={(e) => {
+              setEdgeType(e.target.value);
+            }}
+          />
+          <Cytoscape
+            elements={exampleResponseHipsterStore.elements}
+            height={600}
+            width={1340}
+            layout="dagre"
+            key={edgeType}
+            edgeType={edgeType}
           />
         </div>
       );

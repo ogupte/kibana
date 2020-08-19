@@ -110,7 +110,11 @@ function isService(el: cytoscape.NodeSingular) {
   return el.data(SERVICE_NAME) !== undefined;
 }
 
-const getStyle = (theme: EuiTheme): cytoscape.Stylesheet[] => {
+const getStyle = (
+  theme: EuiTheme,
+  layout?: string,
+  edgeType?: string = 'taxi'
+): cytoscape.Stylesheet[] => {
   const lineColor = theme.eui.euiColorMediumShade;
   return [
     {
@@ -167,10 +171,38 @@ const getStyle = (theme: EuiTheme): cytoscape.Stylesheet[] => {
     },
     {
       selector: 'edge',
+      // style: {
+      //   'curve-style': 'taxi',
+      //   // @ts-ignore
+      //   'taxi-direction': 'auto',
+      //   'line-color': lineColor,
+      //   'overlay-opacity': 0,
+      //   'target-arrow-color': lineColor,
+      //   'target-arrow-shape': isIE11 ? 'none' : 'triangle',
+      //   // The DefinitelyTyped definitions don't specify this property since it's
+      //   // fairly new.
+      //   //
+      //   // @ts-ignore
+      //   'target-distance-from-node': isIE11
+      //     ? undefined
+      //     : theme.eui.paddingSizes.xs,
+      //   width: 1,
+      //   'source-arrow-shape': 'none',
+      //   'z-index': zIndexEdge,
+      //   ...(layout === 'dagre'
+      //     ? {
+      //         'curve-style': 'unbundled-bezier',
+      //         // 'curve-style': 'segments',
+      //       }
+      //     : {
+      //         'curve-style': 'taxi',
+      //         // @ts-ignore
+      //         'taxi-direction': 'auto',
+      //       }),
+      // },
       style: {
-        'curve-style': 'taxi',
+        'curve-style': edgeType,
         // @ts-ignore
-        'taxi-direction': 'auto',
         'line-color': lineColor,
         'overlay-opacity': 0,
         'target-arrow-color': lineColor,
@@ -185,6 +217,12 @@ const getStyle = (theme: EuiTheme): cytoscape.Stylesheet[] => {
         width: 1,
         'source-arrow-shape': 'none',
         'z-index': zIndexEdge,
+        ...({
+          taxi: {
+            // @ts-ignore
+            'taxi-direction': 'auto',
+          },
+        }[edgeType] || {}),
       },
     },
     {
@@ -262,11 +300,13 @@ ${theme.eui.euiColorLightShade}`,
 });
 
 export const getCytoscapeOptions = (
-  theme: EuiTheme
+  theme: EuiTheme,
+  layout?: string,
+  edgeType?: string
 ): cytoscape.CytoscapeOptions => ({
   autoungrabify: true,
   boxSelectionEnabled: false,
   maxZoom: 3,
   minZoom: 0.2,
-  style: getStyle(theme),
+  style: getStyle(theme, layout, edgeType),
 });
