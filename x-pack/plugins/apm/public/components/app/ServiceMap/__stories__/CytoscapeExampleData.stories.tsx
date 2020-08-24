@@ -15,6 +15,7 @@ import {
   EuiSpacer,
   EuiToolTip,
   EuiSelect,
+  EuiSwitch,
 } from '@elastic/eui';
 import { storiesOf } from '@storybook/react';
 import React, { useEffect, useState } from 'react';
@@ -48,10 +49,11 @@ storiesOf(STORYBOOK_PATH, module)
       );
       const [layout, setLayout] = useState<string>('');
       const [edgeType, setEdgeType] = useState<string>('taxi');
+      const [showEdgeMetrics, setShowEdgeMetrics] = useState<boolean>(false);
 
       return (
         <div>
-          <EuiFlexGroup>
+          <EuiFlexGroup alignItems="center">
             <EuiFlexItem>
               <EuiButton
                 onClick={() => {
@@ -111,15 +113,22 @@ storiesOf(STORYBOOK_PATH, module)
                 }}
               />
             </EuiFlexItem>
+            <EuiFlexItem>
+              <EuiSwitch
+                label="Edge metrics"
+                checked={showEdgeMetrics}
+                onChange={(e) => setShowEdgeMetrics(e.target.checked)}
+              />
+            </EuiFlexItem>
           </EuiFlexGroup>
 
           <Cytoscape
             elements={elements}
             height={600}
             width={1340}
-            key={`${layout}-${edgeType}`}
             layout={layout}
             edgeType={edgeType}
+            showEdgeMetrics={showEdgeMetrics}
           />
 
           {json && (
@@ -160,10 +169,64 @@ storiesOf(STORYBOOK_PATH, module)
         // eslint-disable-next-line react-hooks/exhaustive-deps
       }, []);
 
+      const [layout, setLayout] = useState<string>('');
+      const [edgeType, setEdgeType] = useState<string>('taxi');
+      const [showEdgeMetrics, setShowEdgeMetrics] = useState<boolean>(false);
       return (
         <div>
-          <Cytoscape elements={elements} height={600} width={1340} />
+          <Cytoscape
+            elements={elements}
+            height={600}
+            width={1340}
+            layout={layout}
+            edgeType={edgeType}
+            showEdgeMetrics={showEdgeMetrics}
+          />
           <EuiForm isInvalid={error !== undefined} error={error}>
+            <EuiFlexGroup
+              justifyContent="spaceAround"
+              style={{ margin: 8 }}
+              alignItems="center"
+            >
+              <EuiFlexItem grow={false}>
+                <EuiSelect
+                  prepend="Layout"
+                  options={[
+                    { value: '', text: 'default (breadth-first)' },
+                    { value: 'dagre', text: 'dagre (network graph)' },
+                    { value: 'cose', text: 'cose (physics-based)' },
+                  ]}
+                  value={layout}
+                  onChange={(e) => {
+                    setLayout(e.target.value);
+                  }}
+                />
+              </EuiFlexItem>
+              <EuiFlexItem grow={false}>
+                <EuiSelect
+                  prepend="Edge type"
+                  options={[
+                    { value: 'taxi', text: 'taxi' },
+                    { value: 'unbundled-bezier', text: 'unbundled-bezier' },
+                    { value: 'bezier', text: 'bezier' },
+                    { value: 'straight', text: 'straight' },
+                    { value: 'segments', text: 'segments' },
+                    { value: 'haystack', text: 'haystack' },
+                  ]}
+                  value={edgeType}
+                  onChange={(e) => {
+                    setEdgeType(e.target.value);
+                  }}
+                />
+              </EuiFlexItem>
+              <EuiFlexItem>
+                <EuiSwitch
+                  label="Edge metrics"
+                  checked={showEdgeMetrics}
+                  onChange={(e) => setShowEdgeMetrics(e.target.checked)}
+                />
+              </EuiFlexItem>
+            </EuiFlexGroup>
             <EuiFlexGroup>
               <EuiFlexItem>
                 <EuiCodeEditor
@@ -282,31 +345,43 @@ storiesOf(STORYBOOK_PATH, module)
     'Opbeans + beats - dagre',
     () => {
       const [edgeType, setEdgeType] = useState<string>('unbundled-bezier');
+      const [showEdgeMetrics, setShowEdgeMetrics] = useState<boolean>(false);
 
       return (
         <div>
-          <EuiSelect
-            prepend="Edge type"
-            options={[
-              { value: 'taxi', text: 'taxi' },
-              { value: 'unbundled-bezier', text: 'unbundled-bezier' },
-              { value: 'bezier', text: 'bezier' },
-              { value: 'straight', text: 'straight' },
-              { value: 'segments', text: 'segments' },
-              { value: 'haystack', text: 'haystack' },
-            ]}
-            value={edgeType}
-            onChange={(e) => {
-              setEdgeType(e.target.value);
-            }}
-          />
+          <EuiFlexGroup alignItems="center">
+            <EuiFlexItem>
+              <EuiSelect
+                prepend="Edge type"
+                options={[
+                  { value: 'taxi', text: 'taxi' },
+                  { value: 'unbundled-bezier', text: 'unbundled-bezier' },
+                  { value: 'bezier', text: 'bezier' },
+                  { value: 'straight', text: 'straight' },
+                  { value: 'segments', text: 'segments' },
+                  { value: 'haystack', text: 'haystack' },
+                ]}
+                value={edgeType}
+                onChange={(e) => {
+                  setEdgeType(e.target.value);
+                }}
+              />
+            </EuiFlexItem>
+            <EuiFlexItem>
+              <EuiSwitch
+                label="Edge metrics"
+                checked={showEdgeMetrics}
+                onChange={(e) => setShowEdgeMetrics(e.target.checked)}
+              />
+            </EuiFlexItem>
+          </EuiFlexGroup>
           <Cytoscape
             elements={exampleResponseOpbeansBeats.elements}
             height={600}
             width={1340}
             layout="dagre"
-            key={edgeType}
             edgeType={edgeType}
+            showEdgeMetrics={showEdgeMetrics}
           />
         </div>
       );
@@ -342,30 +417,42 @@ storiesOf(STORYBOOK_PATH, module)
     'Hipster store - dagre',
     () => {
       const [edgeType, setEdgeType] = useState<string>('unbundled-bezier');
+      const [showEdgeMetrics, setShowEdgeMetrics] = useState<boolean>(false);
       return (
         <div>
-          <EuiSelect
-            prepend="Edge type"
-            options={[
-              { value: 'taxi', text: 'taxi' },
-              { value: 'unbundled-bezier', text: 'unbundled-bezier' },
-              { value: 'bezier', text: 'bezier' },
-              { value: 'straight', text: 'straight' },
-              { value: 'segments', text: 'segments' },
-              { value: 'haystack', text: 'haystack' },
-            ]}
-            value={edgeType}
-            onChange={(e) => {
-              setEdgeType(e.target.value);
-            }}
-          />
+          <EuiFlexGroup alignItems="center">
+            <EuiFlexItem>
+              <EuiSelect
+                prepend="Edge type"
+                options={[
+                  { value: 'taxi', text: 'taxi' },
+                  { value: 'unbundled-bezier', text: 'unbundled-bezier' },
+                  { value: 'bezier', text: 'bezier' },
+                  { value: 'straight', text: 'straight' },
+                  { value: 'segments', text: 'segments' },
+                  { value: 'haystack', text: 'haystack' },
+                ]}
+                value={edgeType}
+                onChange={(e) => {
+                  setEdgeType(e.target.value);
+                }}
+              />
+            </EuiFlexItem>
+            <EuiFlexItem>
+              <EuiSwitch
+                label="Edge metrics"
+                checked={showEdgeMetrics}
+                onChange={(e) => setShowEdgeMetrics(e.target.checked)}
+              />
+            </EuiFlexItem>
+          </EuiFlexGroup>
           <Cytoscape
             elements={exampleResponseHipsterStore.elements}
             height={600}
             width={1340}
             layout="dagre"
-            key={edgeType}
             edgeType={edgeType}
+            showEdgeMetrics={showEdgeMetrics}
           />
         </div>
       );

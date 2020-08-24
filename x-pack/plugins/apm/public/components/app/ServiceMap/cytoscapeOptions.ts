@@ -110,10 +110,23 @@ function isService(el: cytoscape.NodeSingular) {
   return el.data(SERVICE_NAME) !== undefined;
 }
 
+function randomHash(s: string) {
+  const i32 = s.split('').reduce(function (a, b) {
+    // eslint-disable-next-line no-bitwise
+    a = (a << 5) - a + b.charCodeAt(0);
+    // eslint-disable-next-line no-bitwise
+    return a & a;
+  }, 0);
+  // eslint-disable-next-line no-bitwise
+  const [uInt32Val, uInt32Max] = new Uint32Array([i32, ~0]);
+  return uInt32Val / uInt32Max;
+}
+
 const getStyle = (
   theme: EuiTheme,
   layout?: string,
-  edgeType?: string = 'taxi'
+  edgeType: string = 'taxi',
+  showEdgeMetrics: boolean = false
 ): cytoscape.Stylesheet[] => {
   const lineColor = theme.eui.euiColorMediumShade;
   return [
@@ -218,11 +231,22 @@ const getStyle = (
         'source-arrow-shape': 'none',
         'z-index': zIndexEdge,
         ...({
+          // eslint-disable-next-line prettier/prettier
           taxi: {
             // @ts-ignore
             'taxi-direction': 'auto',
           },
         }[edgeType] || {}),
+        label: (el: cytoscape.EdgeSingular) =>
+          `${Math.floor(randomHash(el.data('id')) * 500)} ms`,
+        // theme.euiFontFamily doesn't work here for some reason, so we're just
+        // specifying a subset of the fonts for the label text.
+        'font-family': 'Inter UI, Segoe UI, Helvetica, Arial, sans-serif',
+        'font-size': theme.eui.euiFontSizeS,
+        // 'font-weight': theme.eui.euiFontWeightLight,
+        color: theme.eui.textColors.subdued,
+        'text-margin-y': 12,
+        'text-opacity': showEdgeMetrics ? 1 : 0,
       },
     },
     {
@@ -255,6 +279,8 @@ const getStyle = (
         'line-color': theme.eui.euiColorDarkShade,
         'source-arrow-color': theme.eui.euiColorDarkShade,
         'target-arrow-color': theme.eui.euiColorDarkShade,
+        // 'font-weight': theme.eui.euiFontWeightBold,
+        color: theme.eui.textColors.text,
       },
     },
     {
@@ -272,6 +298,7 @@ const getStyle = (
         'target-arrow-color': theme.eui.euiColorPrimary,
         // @ts-ignore
         'z-index': zIndexEdgeHighlight,
+        'font-weight': theme.eui.euiFontWeightBold,
       },
     },
   ];
@@ -302,11 +329,12 @@ ${theme.eui.euiColorLightShade}`,
 export const getCytoscapeOptions = (
   theme: EuiTheme,
   layout?: string,
-  edgeType?: string
+  edgeType?: string,
+  showEdgeMetrics?: boolean
 ): cytoscape.CytoscapeOptions => ({
   autoungrabify: true,
   boxSelectionEnabled: false,
   maxZoom: 3,
   minZoom: 0.2,
-  style: getStyle(theme, layout, edgeType),
+  style: getStyle(theme, layout, edgeType, showEdgeMetrics),
 });

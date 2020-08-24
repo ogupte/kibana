@@ -38,6 +38,7 @@ interface CytoscapeProps {
   style?: CSSProperties;
   layout?: string;
   edgeType?: string;
+  showEdgeMetrics?: boolean;
 }
 
 function useCytoscape(options: cytoscape.CytoscapeOptions) {
@@ -76,7 +77,10 @@ function rotatePoint(
   };
 }
 
-function getDagreLayout(cy: cytoscape.Core) {
+function getDagreLayout(
+  cy: cytoscape.Core,
+  onLayoutStop: () => void = () => {}
+) {
   let longestPathSize = 1;
   cy.elements().depthFirstSearch({
     root: cy.nodes().roots(),
@@ -116,16 +120,24 @@ function getDagreLayout(cy: cytoscape.Core) {
     //   }
     //   return 1;
     // },
+    stop: onLayoutStop,
   });
 }
 
-function getCoseLayout(cy: cytoscape.Core) {
+function getCoseLayout(
+  cy: cytoscape.Core,
+  onLayoutStop: () => void = () => {}
+) {
   return cy.layout({
     name: 'cose',
     fit: true,
     componentSpacing: 64,
     idealEdgeLength: () => 64,
     animate: false,
+    randomize: false,
+    nodeDimensionsIncludeLabels: true,
+    stop: onLayoutStop,
+    // numIter: 250,
   });
 }
 
@@ -172,12 +184,23 @@ export function Cytoscape({
   style,
   layout,
   edgeType,
+  showEdgeMetrics,
 }: CytoscapeProps) {
   const theme = useTheme();
   const [ref, cy] = useCytoscape({
-    ...getCytoscapeOptions(theme, layout, edgeType),
+    ...getCytoscapeOptions(theme, layout, edgeType, showEdgeMetrics),
     elements,
   });
+
+  useEffect(() => {
+    if (!cy) {
+      return;
+    }
+    cy.style(
+      // @ts-ignore
+      getCytoscapeOptions(theme, layout, edgeType, showEdgeMetrics).style
+    );
+  }, [cy, edgeType, layout, showEdgeMetrics, theme]);
 
   const nodeHeight = getNodeHeight(theme);
 
@@ -199,7 +222,7 @@ export function Cytoscape({
       }
     };
 
-    const dataHandler: cytoscape.EventHandler = (event) => {
+    const dataHandler: cytoscape.EventHandler = async (event) => {
       if (cy && cy.elements().length > 0) {
         if (serviceName) {
           resetConnectedEdgeStyle(cy.getElementById(serviceName));
@@ -218,7 +241,13 @@ export function Cytoscape({
           return;
         }
         if (layout === 'cose') {
-          getCoseLayout(cy).run();
+          getDagreLayout(cy, () => {
+            getCoseLayout(cy).run();
+          }).run();
+          // cy.layout(
+          //   getLayoutOptions(selectedRoots, height, width, nodeHeight)
+          // ).run();
+          // getCoseLayout(cy).run();
           return;
         }
         cy.layout(
