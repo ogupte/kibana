@@ -119,6 +119,16 @@ function getDagreLayout(cy: cytoscape.Core) {
   });
 }
 
+function getCoseLayout(cy: cytoscape.Core) {
+  return cy.layout({
+    name: 'cose',
+    fit: true,
+    componentSpacing: 64,
+    idealEdgeLength: () => 64,
+    animate: false,
+  });
+}
+
 function getLayoutOptions(
   selectedRoots: string[],
   height: number,
@@ -205,11 +215,15 @@ export function Cytoscape({
         const selectedRoots = selectRoots(event.cy);
         if (layout === 'dagre') {
           getDagreLayout(cy).run();
-        } else {
-          cy.layout(
-            getLayoutOptions(selectedRoots, height, width, nodeHeight)
-          ).run();
+          return;
         }
+        if (layout === 'cose') {
+          getCoseLayout(cy).run();
+          return;
+        }
+        cy.layout(
+          getLayoutOptions(selectedRoots, height, width, nodeHeight)
+        ).run();
       }
     };
     let layoutstopDelayTimeout: NodeJS.Timeout;

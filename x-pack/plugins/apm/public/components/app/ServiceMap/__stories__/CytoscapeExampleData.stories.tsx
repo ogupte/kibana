@@ -84,8 +84,9 @@ storiesOf(STORYBOOK_PATH, module)
               <EuiSelect
                 prepend="Layout"
                 options={[
-                  { value: '', text: 'default' },
-                  { value: 'dagre', text: 'dagre' },
+                  { value: '', text: 'default (breadth-first)' },
+                  { value: 'dagre', text: 'dagre (network graph)' },
+                  { value: 'cose', text: 'cose (physics-based)' },
                 ]}
                 value={layout}
                 onChange={(e) => {
