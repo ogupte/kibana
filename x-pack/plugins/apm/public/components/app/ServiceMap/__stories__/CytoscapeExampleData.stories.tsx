@@ -44,8 +44,9 @@ storiesOf(STORYBOOK_PATH, module)
     () => {
       const [size, setSize] = useState<number>(10);
       const [json, setJson] = useState<string>('');
+      const [hasAnomalies, setHasAnomalies] = useState<boolean>(true);
       const [elements, setElements] = useState<any[]>(
-        generateServiceMapElements(size)
+        generateServiceMapElements({ size, hasAnomalies })
       );
       const [layout, setLayout] = useState<string>('');
       const [edgeType, setEdgeType] = useState<string>('taxi');
@@ -57,7 +58,9 @@ storiesOf(STORYBOOK_PATH, module)
             <EuiFlexItem>
               <EuiButton
                 onClick={() => {
-                  setElements(generateServiceMapElements(size));
+                  setElements(
+                    generateServiceMapElements({ size, hasAnomalies })
+                  );
                   setJson('');
                 }}
               >
@@ -74,6 +77,13 @@ storiesOf(STORYBOOK_PATH, module)
               </EuiToolTip>
             </EuiFlexItem>
             <EuiFlexItem>
+              <EuiSwitch
+                label="With anomalies"
+                checked={hasAnomalies}
+                onChange={(e) => setHasAnomalies(e.target.checked)}
+              />
+            </EuiFlexItem>
+            <EuiFlexItem>
               <EuiButton
                 onClick={() => {
                   setJson(JSON.stringify({ elements }, null, 2));
@@ -82,6 +92,8 @@ storiesOf(STORYBOOK_PATH, module)
                 Get JSON
               </EuiButton>
             </EuiFlexItem>
+          </EuiFlexGroup>
+          <EuiFlexGroup alignItems="center">
             <EuiFlexItem>
               <EuiSelect
                 prepend="Layout"
