@@ -95,6 +95,7 @@ import {
   rumVisitorsBreakdownRoute,
   rumWebCoreVitals,
 } from './rum_client';
+import { serviceOverviewDependenciesRoute } from './service_overview';
 
 const createApmApi = () => {
   const api = createApi()
@@ -196,7 +197,10 @@ const createApmApi = () => {
     .add(rumJSErrors)
     .add(rumUrlSearch)
     .add(rumLongTaskMetrics)
-    .add(rumHasDataRoute);
+    .add(rumHasDataRoute)
+
+    // Service overview
+    .add(serviceOverviewDependenciesRoute);
 
   return api;
 };
